@@ -1,15 +1,18 @@
 package sample.service;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-
-import java.io.IOException;
+import sample.field.Field;
 
 public class MenuService {
+    private FieldService fieldService;
+
+    public MenuService(FieldService fieldService) {
+        this.fieldService = fieldService;
+    }
+
     @FXML
     public int calculateBombs(String difficulty, int size) {
         switch (difficulty) {
@@ -22,22 +25,21 @@ public class MenuService {
             case "DOOMSLAYER":
                 return (int)(size+Math.pow((double)size*0.7,2)-1);
             default:
-                return (int)(size+Math.pow((double)size*0.25,2)-1);
+                return size-1;
         }
     }
 
     @FXML
-    public void startGame() {
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(getClass().getResource("fxml/game.fxml"));
-            Stage game = new Stage();
-            game.setTitle("Minesweeper");
-            game.setScene(new Scene(root, 600, 600));
-            game.setResizable(false);
-            game.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void startGame(Field field) {
+        Group root = new Group();
+        Scene scene=new Scene(root, 600, 600);
+        Stage game = new Stage();
+        fieldService.initField(field,root);
+        root.getChildren().add(field.getBombGrid());
+        root.getChildren().add(field.getTileGrid());
+        game.setTitle("Minesweeper");
+        game.setScene(scene);
+        game.setResizable(false);
+        game.show();
     }
 }

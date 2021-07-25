@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="625.0" prefWidth="560.0" styleClass="background" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.MenuController">
+<AnchorPane prefHeight="625.0" prefWidth="560.0" styleClass="background" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.Controller">
    <children>
       <Text layoutX="119.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Minesweeper Game">
          <font>
@@ -16,7 +16,7 @@
       </Text>
       <AnchorPane layoutX="20.0" layoutY="70.0" prefHeight="74.0" prefWidth="520.0">
          <children>
-            <RadioButton fx:id="novice" layoutX="14.0" layoutY="27.0" mnemonicParsing="false" onAction="#process" text="NOVICE" textFill="GREEN">
+            <RadioButton fx:id="novice" layoutX="14.0" layoutY="27.0" mnemonicParsing="false" selected="true" onAction="#process" text="NOVICE" textFill="GREEN">
                <font>
                   <Font name="Stencil" size="15.0" />
                </font>
@@ -24,7 +24,7 @@
                   <ToggleGroup fx:id="diff" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="solider" layoutX="124.0" layoutY="27.0" mnemonicParsing="false" onAction="#process" selected="true" text="SOLIDER" textFill="YELLOW" toggleGroup="$diff">
+            <RadioButton fx:id="solider" layoutX="124.0" layoutY="27.0" mnemonicParsing="false" onAction="#process" text="SOLIDER" textFill="YELLOW" toggleGroup="$diff">
                <font>
                   <Font name="Stencil" size="15.0" />
                </font>
@@ -41,7 +41,7 @@
             </RadioButton>
          </children>
       </AnchorPane>
-      <Button fx:id="playbutton" layoutX="203.0" layoutY="215.0" mnemonicParsing="false" onMouseClicked="#process" prefHeight="66.0" prefWidth="154.0" text="PLAY">
+      <Button fx:id="playbutton" layoutX="203.0" layoutY="215.0" mnemonicParsing="false" onAction="#process" prefHeight="66.0" prefWidth="154.0" text="PLAY">
          <font>
             <Font name="Stencil" size="28.0" />
          </font>
