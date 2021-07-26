@@ -13,8 +13,9 @@ public class Field {
     private Tile[][] tiles;
     private int[][] numbers;
     private boolean[][] bombs;
+    private boolean[][] openedTiles;
     @FXML
-    private GridPane tileGrid, bombGrid;
+    private GridPane tileGrid;
     private static final Difficulty DEFAULT_DIFFICULTY=Difficulty.valueOf("SOLIDER");
     private static final int DEFAULT_SIZE = 20;
     public static final double BETCHEL_BOARD_BENCHMARK_VALUE = 4.29;
@@ -80,14 +81,6 @@ public class Field {
         this.numbers = numbers;
     }
 
-    public GridPane getBombGrid() {
-        return bombGrid;
-    }
-
-    public void setBombGrid(GridPane bombGrid) {
-        this.bombGrid = bombGrid;
-    }
-
     public int getBombsCount() {
         return bombCount;
     }
@@ -102,5 +95,13 @@ public class Field {
 
     public void setBombs(boolean[][] bombs) {
         this.bombs = bombs;
+    }
+
+    public boolean[][] getOpenedTiles() {
+        return openedTiles;
+    }
+
+    public void setOpenedTiles(boolean[][] openedTiles) {
+        this.openedTiles = openedTiles;
     }
 }

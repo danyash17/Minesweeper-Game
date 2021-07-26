@@ -3,11 +3,12 @@ package sample.service;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import sample.field.Field;
 
 public class MenuService {
-    private FieldService fieldService;
+    private final FieldService fieldService;
 
     public MenuService(FieldService fieldService) {
         this.fieldService = fieldService;
@@ -32,10 +33,9 @@ public class MenuService {
     @FXML
     public void startGame(Field field) {
         Group root = new Group();
-        Scene scene=new Scene(root, 600, 600);
+        Scene scene=new Scene(root, 608, 608);
         Stage game = new Stage();
         fieldService.initField(field,root);
-        root.getChildren().add(field.getBombGrid());
         root.getChildren().add(field.getTileGrid());
         game.setTitle("Minesweeper");
         game.setScene(scene);
