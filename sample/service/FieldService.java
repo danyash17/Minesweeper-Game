@@ -1,20 +1,23 @@
 package sample.service;
 
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import sample.field.Coordinates;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import sample.field.Field;
 import sample.field.Tile;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 public class FieldService {
 
@@ -57,10 +60,15 @@ public class FieldService {
                 EventHandler<MouseEvent> eventHandler = e -> {
                     if (e.getButton() == MouseButton.PRIMARY) {
                         field.getTileGrid().getChildren().remove(tile);
-                        if (field.getNumbers()[tile.getX()][tile.getY()] == 0) {
-                            drawAround(field, tile.getX(), tile.getY());
-                        } else drawNode(field, tile);
+                        int x = tile.getX(), y = tile.getY();
+                        if (field.getNumbers()[x][y] == 0 && !field.getBombs()[x][y]) {
+                            drawAround(field, root, x, y);
+                        } else drawNode(field, root, x, y);
                     } else if (e.getButton() == MouseButton.SECONDARY) {
+                        if (field.getFlags().getCount() == 0) {
+                            return;
+                        }
+                        field.getFlags().decrement();
                         String url = "flag.png";
                         Image image = new Image(url);
                         ImageView imageView = new ImageView(image);
@@ -68,6 +76,13 @@ public class FieldService {
                         imageView.setPreserveRatio(true);
                         GridPane.setRowIndex(imageView, tile.getY());
                         GridPane.setColumnIndex(imageView, tile.getX());
+                        EventHandler<MouseEvent> imageEventHandler = event -> {
+                            if (event.getButton() == MouseButton.SECONDARY) {
+                                field.getFlags().increment();
+                                field.getTileGrid().getChildren().remove(imageView);
+                            }
+                        };
+                        imageView.setOnMousePressed(imageEventHandler);
                         field.getTileGrid().getChildren().add(imageView);
                     }
                 };
@@ -107,21 +122,24 @@ public class FieldService {
         return bombsNear;
     }
 
-    private void drawAround(Field field, int x, int y) {
+    private void drawAround(Field field, Group root, int x, int y) {
         int size = field.getSize();
-        int[][] numbers = field.getNumbers();
         boolean[][] bombs = field.getBombs();
         boolean[][] openedTiles = field.getOpenedTiles();
-        boolean[] emptiesNear = new boolean[8];
-        drawImage(field, x, y, "tile_empty.png");
+        drawNode(field, root, x, y);
         openedTiles[x][y] = true;
         for (int j = 1; j > -2; j--) {
             for (int i = -1; i < 2; i++) {
                 if (x + i < size && x + i >= 0 &&
                         y + j < size && y + j >= 0 &&
                         !openedTiles[x + i][y + j] &&
-                        numbers[x + i][y + j] == 0 && !bombs[x + i][y + j]) {
-                    drawAround(field, x + i, y + j);
+                        !bombs[x + i][y + j]) {
+                    boolean[] around = lookAround(field, bombs, x, y);
+                    if (IntStream.range(0, around.length)
+                            .mapToObj(t -> around[t])
+                            .noneMatch(t -> t)) {
+                        drawAround(field, root, x + i, y + j);
+                    }
                 }
             }
         }
@@ -164,6 +182,48 @@ public class FieldService {
         field.setOpenedTiles(initOpenedTiles(field));
         field.setBombs(initBombs(field));
         field.setNumbers(initNumbers(field));
+        field.setScoreboard(initScoreboard(field));
+        field.setCountGrid(initCountGrid(field));
+    }
+
+    private GridPane initCountGrid(Field field) {
+        GridPane grid = new GridPane();
+        Text clockText = field.getClock().getText();
+        Text flagsText = field.getFlags().getText();
+        grid.setPrefHeight(45);
+        grid.setPrefWidth(246);
+        grid.setLayoutX(175);
+        grid.setAlignment(Pos.BASELINE_CENTER);
+        ColumnConstraints flagColumn = new ColumnConstraints();
+        ColumnConstraints timerColumn = new ColumnConstraints();
+        RowConstraints row = new RowConstraints();
+        flagColumn.setPrefWidth(100);
+        timerColumn.setPrefWidth(100);
+        grid.getColumnConstraints().add(flagColumn);
+        grid.getColumnConstraints().add(timerColumn);
+        grid.getRowConstraints().add(row);
+        GridPane.setConstraints(clockText, 0, 0);
+        GridPane.setHalignment(clockText, HPos.CENTER);
+        GridPane.setConstraints(flagsText, 1, 0);
+        GridPane.setHalignment(flagsText, HPos.CENTER);
+        clockText.setFont(Font.font("Stencil", 45));
+        flagsText.setFont(Font.font("Stencil", 45));
+        grid.getChildren().add(clockText);
+        field.getClock().start();
+        grid.getChildren().add(flagsText);
+        grid.setStyle("-fx-background-color: #cd3232;");
+        return grid;
+    }
+
+    private Pane initScoreboard(Field field) {
+        Pane pane = new Pane();
+        pane.setPrefHeight(45);
+        pane.setPrefWidth(600);
+        pane.setLayoutY(608);
+        Image image = new Image("scoreboard.png");
+        ImageView imageView = new ImageView(image);
+        pane.getChildren().add(imageView);
+        return pane;
     }
 
     private boolean[][] initOpenedTiles(Field field) {
@@ -175,7 +235,7 @@ public class FieldService {
         return openedTiles;
     }
 
-    private void drawImage(Field field, int i, int j, String url) {
+    private void drawImage(Field field, Group root, int i, int j, String url) {
         Image image = new Image(url);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(30);
@@ -185,53 +245,42 @@ public class FieldService {
         field.getTileGrid().getChildren().add(imageView);
     }
 
-    private void drawNode(Field field, Tile tile) {
+    private void drawNode(Field field, Group root, int x, int y) {
         int size = field.getSize();
-        int x = tile.getX(), y = tile.getY();
         int[][] numbers = field.getNumbers();
         boolean[][] bombs = field.getBombs();
         if (bombs[x][y]) {
-            drawImage(field, x, y, "bomb.png");
+            drawImage(field, root, x, y, "bomb.png");
             return;
         }
         switch (numbers[x][y]) {
-            case 0: {
-                drawImage(field, x, y, "tile_empty.png");
-                break;
+            case 0 -> {
+                drawImage(field, root, x, y, "tile_empty.png");
             }
-            case 1: {
-                drawImage(field, x, y, "tile1.png");
-                break;
+            case 1 -> {
+                drawImage(field, root, x, y, "tile1.png");
             }
-            case 2: {
-                drawImage(field, x, y, "tile2.png");
-                break;
+            case 2 -> {
+                drawImage(field, root, x, y, "tile2.png");
             }
-            case 3: {
-                drawImage(field, x, y, "tile3.png");
-                break;
+            case 3 -> {
+                drawImage(field, root, x, y, "tile3.png");
             }
-            case 4: {
-                drawImage(field, x, y, "tile4.png");
-                break;
+            case 4 -> {
+                drawImage(field, root, x, y, "tile4.png");
             }
-            case 5: {
-                drawImage(field, x, y, "tile5.png");
-                break;
+            case 5 -> {
+                drawImage(field, root, x, y, "tile5.png");
             }
-            case 6: {
-                drawImage(field, x, y, "tile6.png");
-                break;
+            case 6 -> {
+                drawImage(field, root, x, y, "tile6.png");
             }
-            case 7: {
-                drawImage(field, x, y, "tile7.png");
-                break;
+            case 7 -> {
+                drawImage(field, root, x, y, "tile7.png");
             }
-            case 8: {
-                drawImage(field, x, y, "tile8.png");
-                break;
+            case 8 -> {
+                drawImage(field, root, x, y, "tile8.png");
             }
         }
     }
 }
-
