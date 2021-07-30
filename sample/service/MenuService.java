@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import sample.field.Field;
+import sample.game.Game;
+import sample.observer.FieldObserver;
 
 public class MenuService {
     private final FieldService fieldService;
@@ -29,14 +31,17 @@ public class MenuService {
     public void startGame(Field field) {
         Group root = new Group();
         Scene scene=new Scene(root, 608, 653);
-        Stage game = new Stage();
-        fieldService.initField(field,root);
+        Stage stage = new Stage();
+        Game game=new Game(field);
+        fieldService.initField(field,root,game);
+        game.setObserver(new FieldObserver(field,game));
         root.getChildren().add(field.getTileGrid());
         root.getChildren().add(field.getScoreboard());
         field.getScoreboard().getChildren().add(field.getCountGrid());
-        game.setTitle("Minesweeper");
-        game.setScene(scene);
-        game.setResizable(false);
-        game.show();
+        stage.setTitle("Minesweeper");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        game.start();
+        stage.show();
     }
 }

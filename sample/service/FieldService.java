@@ -3,7 +3,6 @@ package sample.service;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,8 +11,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import sample.enums.Sound;
 import sample.field.Field;
 import sample.field.Tile;
+import sample.game.Game;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -49,7 +50,7 @@ public class FieldService {
         return grid;
     }
 
-    public Tile[][] initTiles(Field field, Group root) {
+    public Tile[][] initTiles(Field field, Group root, Game game) {
         int size = field.getSize();
         Tile[][] tiles = new Tile[size][size];
         for (int i = 0; i < size; i++) {
@@ -61,15 +62,20 @@ public class FieldService {
                     if (e.getButton() == MouseButton.PRIMARY) {
                         field.getTileGrid().getChildren().remove(tile);
                         int x = tile.getX(), y = tile.getY();
-                        if (field.getNumbers()[x][y] == 0 && !field.getBombs()[x][y]) {
-                            drawAround(field, root, x, y);
-                        } else drawNode(field, root, x, y);
+                        drawAround(field, root, x, y);
+                        field.getSoundDispatcher().playSound(Sound.OPEN);
+                        if(field.getBombs()[x][y]){
+                            field.getSoundDispatcher().playSound(Sound.DETONATE);
+                            game.interrupt();
+                        }
                     } else if (e.getButton() == MouseButton.SECONDARY) {
                         if (field.getFlags().getCount() == 0) {
                             return;
                         }
+                        game.getObserver().update(tile);
                         field.getFlags().decrement();
-                        String url = "flag.png";
+                        field.getSoundDispatcher().playSound(Sound.FLAG);
+                        String url = "resources/images/flag.png";
                         Image image = new Image(url);
                         ImageView imageView = new ImageView(image);
                         imageView.setFitHeight(30);
@@ -150,20 +156,24 @@ public class FieldService {
         boolean[][] bombLocations = new boolean[size][size];
         int bombs = field.getBombsCount();
         Random coordinate = new Random();
-        while (bombs != 0) {
-            bombLocations[coordinate.nextInt(size - 1)][coordinate.nextInt(size - 1)] = true;
-            bombs--;
+        while (bombs > 0) {
+            int x=coordinate.nextInt(size - 1);
+            int y=coordinate.nextInt(size - 1);
+            if(!bombLocations[x][y]){
+                bombLocations[x][y] = true;
+                bombs--;
+            }
         }
         return bombLocations;
     }
 
     private int[][] initNumbers(Field field) {
         int size = field.getSize();
-        boolean[][] bombLocations = field.getBombs();
+        boolean[][] bombs = field.getBombs();
         int[][] numbers = new int[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (!bombLocations[i][j]) {
+                if (!bombs[i][j]) {
                     int counter = 0;
                     boolean[] bombsNear = lookAround(field, field.getBombs(), i, j);
                     for (boolean b : bombsNear) {
@@ -176,8 +186,8 @@ public class FieldService {
         return numbers;
     }
 
-    public void initField(Field field, Group root) {
-        field.setTiles(initTiles(field, root));
+    public void initField(Field field, Group root,Game game) {
+        field.setTiles(initTiles(field, root,game));
         field.setTileGrid(initTileGrid(field));
         field.setOpenedTiles(initOpenedTiles(field));
         field.setBombs(initBombs(field));
@@ -220,7 +230,7 @@ public class FieldService {
         pane.setPrefHeight(45);
         pane.setPrefWidth(600);
         pane.setLayoutY(608);
-        Image image = new Image("scoreboard.png");
+        Image image = new Image("resources/images/scoreboard.png");
         ImageView imageView = new ImageView(image);
         pane.getChildren().add(imageView);
         return pane;
@@ -250,36 +260,36 @@ public class FieldService {
         int[][] numbers = field.getNumbers();
         boolean[][] bombs = field.getBombs();
         if (bombs[x][y]) {
-            drawImage(field, root, x, y, "bomb.png");
+            drawImage(field, root, x, y, "resources/images/bomb.png");
             return;
         }
         switch (numbers[x][y]) {
             case 0 -> {
-                drawImage(field, root, x, y, "tile_empty.png");
+                drawImage(field, root, x, y, "resources/images/tile_empty.png");
             }
             case 1 -> {
-                drawImage(field, root, x, y, "tile1.png");
+                drawImage(field, root, x, y, "resources/images/tile1.png");
             }
             case 2 -> {
-                drawImage(field, root, x, y, "tile2.png");
+                drawImage(field, root, x, y, "resources/images/tile2.png");
             }
             case 3 -> {
-                drawImage(field, root, x, y, "tile3.png");
+                drawImage(field, root, x, y, "resources/images/tile3.png");
             }
             case 4 -> {
-                drawImage(field, root, x, y, "tile4.png");
+                drawImage(field, root, x, y, "resources/images/tile4.png");
             }
             case 5 -> {
-                drawImage(field, root, x, y, "tile5.png");
+                drawImage(field, root, x, y, "resources/images/tile5.png");
             }
             case 6 -> {
-                drawImage(field, root, x, y, "tile6.png");
+                drawImage(field, root, x, y, "resources/images/tile6.png");
             }
             case 7 -> {
-                drawImage(field, root, x, y, "tile7.png");
+                drawImage(field, root, x, y, "resources/images/tile7.png");
             }
             case 8 -> {
-                drawImage(field, root, x, y, "tile8.png");
+                drawImage(field, root, x, y, "resources/images/tile8.png");
             }
         }
     }

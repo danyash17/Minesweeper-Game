@@ -23,13 +23,13 @@ public class Clock extends Thread {
 
     @Override
     public void run() {
-        while (!Thread.interrupted()){
+        while (true){
             try {
                 Thread.sleep(1000);
-                incrementSeconds();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                break;
             }
+            incrementSeconds();
         }
     }
 

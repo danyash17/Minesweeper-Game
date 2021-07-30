@@ -4,6 +4,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import sample.enums.Difficulty;
+import sample.sound.SoundDispatcher;
+import sample.sound.SoundDispatcherFactory;
 
 public class Field {
     private static Field instance;
@@ -19,6 +21,7 @@ public class Field {
     private Pane scoreboard;
     private Flags flags;
     private Clock clock;
+    private final SoundDispatcher soundDispatcher;
     private static final Difficulty DEFAULT_DIFFICULTY = Difficulty.valueOf("NOVICE");
     private static final int DEFAULT_SIZE = 20;
 
@@ -29,6 +32,7 @@ public class Field {
         notStarted = true;
         flags=new Flags(new Text(String.valueOf(bombCount)),bombCount);
         clock=new Clock();
+        soundDispatcher =new SoundDispatcher(new SoundDispatcherFactory());
     }
 
     public static Field getInstance() {
@@ -141,5 +145,9 @@ public class Field {
 
     public void setCountGrid(GridPane countGrid) {
         this.countGrid = countGrid;
+    }
+
+    public SoundDispatcher getSoundDispatcher() {
+        return soundDispatcher;
     }
 }
