@@ -8,5 +8,6 @@ public enum Sound {
     DOOMSLAYER,
     OPEN,
     FLAG,
-    DETONATE;
+    DETONATE,
+    SUCCESS;
 }

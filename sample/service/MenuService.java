@@ -1,19 +1,14 @@
 package sample.service;
 
 import javafx.fxml.FXML;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import sample.factory.StageFactory;
 import sample.field.Field;
 import sample.game.Game;
-import sample.observer.FieldObserver;
 
 public class MenuService {
-    private final FieldService fieldService;
 
-    public MenuService(FieldService fieldService) {
-        this.fieldService = fieldService;
+    public MenuService() {
     }
 
     @FXML
@@ -29,18 +24,8 @@ public class MenuService {
 
     @FXML
     public void startGame(Field field) {
-        Group root = new Group();
-        Scene scene=new Scene(root, 608, 653);
-        Stage stage = new Stage();
         Game game=new Game(field);
-        fieldService.initField(field,root,game);
-        game.setObserver(new FieldObserver(field,game));
-        root.getChildren().add(field.getTileGrid());
-        root.getChildren().add(field.getScoreboard());
-        field.getScoreboard().getChildren().add(field.getCountGrid());
-        stage.setTitle("Minesweeper");
-        stage.setScene(scene);
-        stage.setResizable(false);
+        Stage stage=StageFactory.getInstance().createGameStage(game,field);
         game.start();
         stage.show();
     }

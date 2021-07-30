@@ -1,14 +1,10 @@
 package sample.sound;
 
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-
-import java.io.File;
 
 import sample.enums.Sound;
+import sample.factory.SoundDispatcherFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class SoundDispatcher {

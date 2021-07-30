@@ -5,7 +5,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import sample.enums.Difficulty;
 import sample.sound.SoundDispatcher;
-import sample.sound.SoundDispatcherFactory;
+import sample.factory.SoundDispatcherFactory;
 
 public class Field {
     private static Field instance;
@@ -24,15 +24,16 @@ public class Field {
     private final SoundDispatcher soundDispatcher;
     private static final Difficulty DEFAULT_DIFFICULTY = Difficulty.valueOf("NOVICE");
     private static final int DEFAULT_SIZE = 20;
+    private static final int DEFAULT_BOMB_COUNT = DEFAULT_SIZE - 1;
 
     private Field() {
         difficulty = DEFAULT_DIFFICULTY;
         size = DEFAULT_SIZE;
-        bombCount = size - 1;
+        bombCount = DEFAULT_BOMB_COUNT;
         notStarted = true;
-        flags=new Flags(new Text(String.valueOf(bombCount)),bombCount);
-        clock=new Clock();
-        soundDispatcher =new SoundDispatcher(new SoundDispatcherFactory());
+        flags = new Flags(new Text(String.valueOf(bombCount)), bombCount);
+        clock = new Clock();
+        soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory());
     }
 
     public static Field getInstance() {

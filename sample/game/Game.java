@@ -1,5 +1,7 @@
 package sample.game;
 
+import javafx.stage.Stage;
+import sample.factory.StageFactory;
 import sample.field.Field;
 import sample.observer.FieldObserver;
 
@@ -15,8 +17,8 @@ public class Game extends Thread {
     public void run() {
         while (true){
             if(interrupted()){
-            field.getClock().interrupt();
-            break;
+                field.getClock().interrupt();
+                break;
             }
         }
     }

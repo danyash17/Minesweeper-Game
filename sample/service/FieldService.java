@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import sample.enums.Difficulty;
 import sample.enums.Sound;
 import sample.field.Field;
 import sample.field.Tile;
@@ -65,7 +66,7 @@ public class FieldService {
                         drawAround(field, root, x, y);
                         field.getSoundDispatcher().playSound(Sound.OPEN);
                         if(field.getBombs()[x][y]){
-                            field.getSoundDispatcher().playSound(Sound.DETONATE);
+                            game.getObserver().loose();
                             game.interrupt();
                         }
                     } else if (e.getButton() == MouseButton.SECONDARY) {
@@ -292,5 +293,16 @@ public class FieldService {
                 drawImage(field, root, x, y, "resources/images/tile8.png");
             }
         }
+    }
+
+    public int calculateScore(Field field) {
+        int seconds= Integer.parseInt(field.getClock().getText().getText());
+        return switch (field.getDifficulty().toString().toUpperCase()) {
+            case "NOVICE" -> 999-seconds;
+            case "SOLIDER" -> (int)(999-(seconds*1.5));
+            case "COMMANDER" -> (int)(999-(seconds*3));
+            case "DOOMSLAYER" -> (int)(999-(seconds*4));
+            default -> 999-seconds;
+        };
     }
 }
