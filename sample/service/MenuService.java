@@ -13,13 +13,22 @@ public class MenuService {
 
     @FXML
     public int calculateBombs(String difficulty, int size) {
-        return switch (difficulty) {
-            case "NOVICE" -> size - 1;
-            case "SOLIDER" -> (int) (size + Math.pow((double) size * 0.25, 2) - 1);
-            case "COMMANDER" -> (int) (size + Math.pow((double) size * 0.45, 2) - 1);
-            case "DOOMSLAYER" -> (int) (size + Math.pow((double) size * 0.7, 2) - 1);
-            default -> size - 1;
-        };
+        switch (difficulty) {
+            case "NOVICE": {
+                return size - 1;
+            }
+            case "SOLIDER": {
+                return (int) (size + Math.pow((double) size * 0.25, 2) - 1);
+            }
+            case "COMMANDER": {
+                return (int) (size + Math.pow((double) size * 0.45, 2) - 1);
+            }
+            case "DOOMSLAYER": {
+                return (int) (size + Math.pow((double) size * 0.7, 2) - 1);
+            }
+            default:
+                return size - 1;
+        }
     }
 
     @FXML

@@ -65,7 +65,7 @@ public class FieldService {
                         int x = tile.getX(), y = tile.getY();
                         drawAround(field, root, x, y);
                         field.getSoundDispatcher().playSound(Sound.OPEN);
-                        if(field.getBombs()[x][y]){
+                        if (field.getBombs()[x][y]) {
                             game.getObserver().loose();
                             game.interrupt();
                         }
@@ -158,9 +158,9 @@ public class FieldService {
         int bombs = field.getBombsCount();
         Random coordinate = new Random();
         while (bombs > 0) {
-            int x=coordinate.nextInt(size - 1);
-            int y=coordinate.nextInt(size - 1);
-            if(!bombLocations[x][y]){
+            int x = coordinate.nextInt(size - 1);
+            int y = coordinate.nextInt(size - 1);
+            if (!bombLocations[x][y]) {
                 bombLocations[x][y] = true;
                 bombs--;
             }
@@ -187,8 +187,8 @@ public class FieldService {
         return numbers;
     }
 
-    public void initField(Field field, Group root,Game game) {
-        field.setTiles(initTiles(field, root,game));
+    public void initField(Field field, Group root, Game game) {
+        field.setTiles(initTiles(field, root, game));
         field.setTileGrid(initTileGrid(field));
         field.setOpenedTiles(initOpenedTiles(field));
         field.setBombs(initBombs(field));
@@ -230,7 +230,7 @@ public class FieldService {
         Pane pane = new Pane();
         pane.setPrefHeight(45);
         pane.setPrefWidth(600);
-        pane.setLayoutY(608);
+        pane.setLayoutY(600);
         Image image = new Image("resources/images/scoreboard.png");
         ImageView imageView = new ImageView(image);
         pane.getChildren().add(imageView);
@@ -265,44 +265,63 @@ public class FieldService {
             return;
         }
         switch (numbers[x][y]) {
-            case 0 -> {
+            case 0: {
                 drawImage(field, root, x, y, "resources/images/tile_empty.png");
+                break;
             }
-            case 1 -> {
+            case 1: {
                 drawImage(field, root, x, y, "resources/images/tile1.png");
+                break;
             }
-            case 2 -> {
+            case 2: {
                 drawImage(field, root, x, y, "resources/images/tile2.png");
+                break;
             }
-            case 3 -> {
+            case 3: {
                 drawImage(field, root, x, y, "resources/images/tile3.png");
+                break;
             }
-            case 4 -> {
+            case 4: {
                 drawImage(field, root, x, y, "resources/images/tile4.png");
+                break;
             }
-            case 5 -> {
+            case 5: {
                 drawImage(field, root, x, y, "resources/images/tile5.png");
+                break;
             }
-            case 6 -> {
+            case 6: {
                 drawImage(field, root, x, y, "resources/images/tile6.png");
+                break;
             }
-            case 7 -> {
+            case 7: {
                 drawImage(field, root, x, y, "resources/images/tile7.png");
+                break;
             }
-            case 8 -> {
+            case 8: {
                 drawImage(field, root, x, y, "resources/images/tile8.png");
+                break;
             }
         }
     }
 
     public int calculateScore(Field field) {
-        int seconds= Integer.parseInt(field.getClock().getText().getText());
-        return switch (field.getDifficulty().toString().toUpperCase()) {
-            case "NOVICE" -> 999-seconds;
-            case "SOLIDER" -> (int)(999-(seconds*1.5));
-            case "COMMANDER" -> (int)(999-(seconds*3));
-            case "DOOMSLAYER" -> (int)(999-(seconds*4));
-            default -> 999-seconds;
-        };
+        int seconds = Integer.parseInt(field.getClock().getText().getText());
+        switch (field.getDifficulty().toString().toUpperCase()) {
+            case "NOVICE": {
+                return 999 - seconds;
+            }
+            case "SOLIDER": {
+                return (int) (999 - (seconds * 1.5));
+            }
+            case "COMMANDER": {
+                return 999 - (seconds * 3);
+            }
+            case "DOOMSLAYER": {
+                return 999 - (seconds * 4);
+            }
+            default: {
+                return 999 - seconds;
+            }
+        }
     }
 }

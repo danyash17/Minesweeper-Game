@@ -35,7 +35,7 @@ public class StageFactory {
 
     public Stage createGameStage(Game game, Field field) {
         Group root = new Group();
-        Scene scene = new Scene(root, 608, 653);
+        Scene scene = new Scene(root, 600, 645);
         Stage stage = new Stage();
         fieldService.initField(field, root, game);
         game.setObserver(new FieldObserver(this, field, game));

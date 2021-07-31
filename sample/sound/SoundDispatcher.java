@@ -10,6 +10,7 @@ import java.util.Map;
 public class SoundDispatcher {
     private Map<Sound, AudioClip> soundMap;
     private SoundDispatcherFactory factory;
+    private String documentBase;
 
     public SoundDispatcher(SoundDispatcherFactory factory) {
         this.factory=factory;

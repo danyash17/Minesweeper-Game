@@ -13,9 +13,7 @@ import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 import sample.enums.Difficulty;
 import sample.enums.Sound;
-import sample.factory.StageFactory;
 import sample.field.Field;
-import sample.service.FieldService;
 import sample.service.MenuService;
 import sample.sound.SoundDispatcher;
 import sample.factory.SoundDispatcherFactory;
@@ -27,12 +25,13 @@ public class MainApplication extends Application {
     public RadioButton novice, solider, commander, doomslayer;
     @FXML
     public Button playbutton;
-    private static final Field FIELD = Field.getInstance();
-    private final MenuService service = new MenuService();
-    private final SoundDispatcher soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory());
-    public Slider slider;
-
-    public MainApplication() {
+    private static Field FIELD;
+    private final MenuService service;
+    private final SoundDispatcher soundDispatcher;
+    public MainApplication(){
+        FIELD= Field.getInstance();
+        service=new MenuService();
+        soundDispatcher=new SoundDispatcher(new SoundDispatcherFactory());
     }
 
     @Override
