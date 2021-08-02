@@ -12,7 +12,6 @@ public class Field {
     private static Field instance;
     private int size;
     private int bombCount;
-    private boolean notStarted;
     private Difficulty difficulty;
     private Tile[][] tiles;
     private int[][] numbers;
@@ -27,19 +26,18 @@ public class Field {
     private static final int DEFAULT_SIZE = 20;
     private static final int DEFAULT_BOMB_COUNT = DEFAULT_SIZE - 1;
 
-    private Field() {
+    private Field(HostServices hostServices) {
         difficulty = DEFAULT_DIFFICULTY;
         size = DEFAULT_SIZE;
         bombCount = DEFAULT_BOMB_COUNT;
-        notStarted = true;
         flags = new Flags(new Text(String.valueOf(bombCount)), bombCount);
         clock = new Clock();
-        soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory());
+        soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory(hostServices));
     }
 
-    public static Field getInstance() {
+    public static Field getInstance(HostServices hostServices) {
         if (instance == null) {
-            return new Field();
+            return new Field(hostServices);
         } else return instance;
     }
 
@@ -73,14 +71,6 @@ public class Field {
 
     public void setTileGrid(GridPane tileGrid) {
         this.tileGrid = tileGrid;
-    }
-
-    public boolean isNotStarted() {
-        return notStarted;
-    }
-
-    public void setStarted(boolean notStarted) {
-        this.notStarted = notStarted;
     }
 
     public int[][] getNumbers() {

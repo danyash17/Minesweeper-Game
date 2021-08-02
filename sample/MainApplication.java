@@ -9,11 +9,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import sample.enums.Difficulty;
 import sample.enums.Sound;
 import sample.field.Field;
+import sample.helper.CalculateHelper;
+import sample.path.ImagePath;
 import sample.service.MenuService;
 import sample.sound.SoundDispatcher;
 import sample.factory.SoundDispatcherFactory;
@@ -28,10 +30,13 @@ public class MainApplication extends Application {
     private static Field FIELD;
     private final MenuService service;
     private final SoundDispatcher soundDispatcher;
-    public MainApplication(){
-        FIELD= Field.getInstance();
-        service=new MenuService();
-        soundDispatcher=new SoundDispatcher(new SoundDispatcherFactory());
+    private final CalculateHelper calculateHelper;
+
+    public MainApplication() {
+        FIELD = Field.getInstance(getHostServices());
+        service = new MenuService();
+        soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory(getHostServices()));
+        calculateHelper = new CalculateHelper();
     }
 
     @Override
@@ -40,6 +45,7 @@ public class MainApplication extends Application {
         primaryStage.setTitle("Minesweeper");
         primaryStage.setScene(new Scene(root, 560, 625));
         primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image(ImagePath.ICON));
         primaryStage.show();
     }
 
@@ -47,12 +53,11 @@ public class MainApplication extends Application {
         launch(args);
     }
 
-
     @FXML
     public void process(ActionEvent event) {
         String id = ((Node) event.getSource()).getId();
         if (Arrays.stream(Difficulty.values()).anyMatch((x) -> x.name().equals(id.toUpperCase()))) {
-            FIELD.setBombCount(service.calculateBombs(id.toUpperCase(), FIELD.getSize()));
+            FIELD.setBombCount(calculateHelper.calculateBombs(id.toUpperCase(), FIELD.getSize()));
             soundDispatcher.playSound(Sound.valueOf(id.toUpperCase()));
         } else if (id.equals("playbutton")) {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

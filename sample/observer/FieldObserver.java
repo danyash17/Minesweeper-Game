@@ -29,7 +29,7 @@ public class FieldObserver {
         defused = new boolean[field.getSize()][field.getSize()];
     }
 
-    public void update(Tile tile){
+    public void observeUpdate(Tile tile){
         int x = tile.getX(), y = tile.getY();
         if (bombs[x][y]) {
             if (!defused[x][y]) {
@@ -49,7 +49,7 @@ public class FieldObserver {
         }
     }
 
-    public void loose(){
+    public void observeLoose(){
         Stage stage = factory.createEndgameStage(field, success);
         soundDispatcher.playSound(Sound.DETONATE);
         game.interrupt();
