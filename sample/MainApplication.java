@@ -33,9 +33,9 @@ public class MainApplication extends Application {
     private final CalculateHelper calculateHelper;
 
     public MainApplication() {
-        FIELD = Field.getInstance(getHostServices());
+        FIELD = Field.getInstance();
         service = new MenuService();
-        soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory(getHostServices()));
+        soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory());
         calculateHelper = new CalculateHelper();
     }
 

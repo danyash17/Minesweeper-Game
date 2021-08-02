@@ -1,23 +1,17 @@
 package sample.factory;
 
-import javafx.application.HostServices;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import sample.enums.Sound;
 import sample.path.SoundPath;
 
-import java.io.File;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 
 public class SoundDispatcherFactory {
-    private final HostServices hostServices;
-    public SoundDispatcherFactory(HostServices hostServices) {
-        this.hostServices = hostServices;
+    public SoundDispatcherFactory() {
     }
 
     public HashMap<Sound, MediaPlayer> initDispatcher() {
-        String base = hostServices.getDocumentBase();
         HashMap<Sound, MediaPlayer> map = new HashMap<>();
         map.put(Sound.OPEN,new MediaPlayer(new Media(getClass().getResource(SoundPath.OPEN).toExternalForm())));
         map.put(Sound.FLAG,new MediaPlayer(new Media(getClass().getResource(SoundPath.FLAG).toExternalForm())));

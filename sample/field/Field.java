@@ -1,6 +1,5 @@
 package sample.field;
 
-import javafx.application.HostServices;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -26,18 +25,18 @@ public class Field {
     private static final int DEFAULT_SIZE = 20;
     private static final int DEFAULT_BOMB_COUNT = DEFAULT_SIZE - 1;
 
-    private Field(HostServices hostServices) {
+    private Field() {
         difficulty = DEFAULT_DIFFICULTY;
         size = DEFAULT_SIZE;
         bombCount = DEFAULT_BOMB_COUNT;
         flags = new Flags(new Text(String.valueOf(bombCount)), bombCount);
         clock = new Clock();
-        soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory(hostServices));
+        soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory());
     }
 
-    public static Field getInstance(HostServices hostServices) {
+    public static Field getInstance() {
         if (instance == null) {
-            return new Field(hostServices);
+            return new Field();
         } else return instance;
     }
 
