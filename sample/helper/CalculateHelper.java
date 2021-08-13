@@ -25,19 +25,19 @@ public class CalculateHelper {
         int seconds = Integer.parseInt(field.getClock().getText().getText());
         switch (field.getDifficulty().toString().toUpperCase()) {
             case "NOVICE": {
-                return 999 - seconds;
+                return (int) ((999 - seconds)*0.2);
             }
             case "SOLIDER": {
-                return (int) (999 - (seconds * 1.5));
+                return 999 - seconds;
             }
             case "COMMANDER": {
-                return 999 - (seconds * 3);
+                return (999 - seconds)*2;
             }
             case "DOOMSLAYER": {
-                return 999 - (seconds * 4);
+                return (999 - seconds)*4;
             }
             default: {
-                return 999 - seconds;
+                return (int) ((999 - seconds)*0.2);
             }
         }
     }

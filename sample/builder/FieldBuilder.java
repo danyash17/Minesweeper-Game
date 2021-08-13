@@ -21,12 +21,12 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class FieldBuilder {
-    private final DrawHelper drawHelper;
-    private final SearchHelper searchHelper;
+    private final DrawHelper DRAW_HELPER;
+    private final SearchHelper SEARCH_HELPER;
 
-    public FieldBuilder(DrawHelper drawHelper, SearchHelper searchHelper) {
-        this.drawHelper = drawHelper;
-        this.searchHelper = searchHelper;
+    public FieldBuilder(DrawHelper draw, SearchHelper search) {
+        this.DRAW_HELPER = draw;
+        this.SEARCH_HELPER = search;
     }
 
     public void buildField(Field field, Group root, Game game) {
@@ -74,7 +74,7 @@ public class FieldBuilder {
                 tiles[i][j] = new Tile(i, j);
                 Tile tile = tiles[i][j];
                 tile.setFocusTraversable(false);
-                EventHandler<MouseEvent> handler = new TileLogicHandler(field, root, game, tile, drawHelper);
+                EventHandler<MouseEvent> handler = new TileLogicHandler(field, root, game, tile, DRAW_HELPER);
                 tile.setOnMousePressed(handler);
                 tile.setAlignment(Pos.CENTER);
                 tile.setMaxWidth(Double.MAX_VALUE);
@@ -109,7 +109,7 @@ public class FieldBuilder {
             for (int j = 0; j < size; j++) {
                 if (!bombs[i][j]) {
                     int counter = 0;
-                    boolean[] bombsNear = searchHelper.searchBombsAround(field, field.getBombs(), i, j);
+                    boolean[] bombsNear = SEARCH_HELPER.searchBombsAround(field, field.getBombs(), i, j);
                     for (boolean b : bombsNear) {
                         if (b) counter++;
                     }

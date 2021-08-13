@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class SoundDispatcher {
     private Map<Sound, MediaPlayer> soundMap;
-    private final SoundDispatcherFactory factory;
+    private final SoundDispatcherFactory FACTORY;
 
     public SoundDispatcher(SoundDispatcherFactory factory) {
-        this.factory=factory;
+        this.FACTORY =factory;
         this.soundMap = factory.initDispatcher();
     }
 

@@ -5,20 +5,16 @@ import javafx.scene.text.Text;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Clock extends Thread {
-    private Text text;
-    private AtomicInteger seconds;
+    private final Text TEXT;
+    private final AtomicInteger SECONDS;
 
     public Clock() {
-        text=new Text("000");
-        seconds=new AtomicInteger(0);
+        TEXT =new Text("000");
+        SECONDS =new AtomicInteger(0);
     }
 
     public Text getText() {
-        return text;
-    }
-
-    public void setText(Text text) {
-        this.text = text;
+        return TEXT;
     }
 
     @Override
@@ -34,8 +30,8 @@ public class Clock extends Thread {
     }
 
     private synchronized void incrementSeconds() {
-        seconds.getAndIncrement();
-        StringBuffer newSeconds=new StringBuffer(String.valueOf(seconds.get()));
+        SECONDS.getAndIncrement();
+        StringBuffer newSeconds=new StringBuffer(String.valueOf(SECONDS.get()));
         if(newSeconds.length()<3){
             if (newSeconds.length() == 1) {
                 newSeconds.insert(0, "00");
@@ -43,7 +39,7 @@ public class Clock extends Thread {
                 newSeconds.insert(0, "0");
             }
         }
-        text.setText(String.valueOf(newSeconds));
-        if(seconds.get()==999) interrupt();
+        TEXT.setText(String.valueOf(newSeconds));
+        if(SECONDS.get()==999) interrupt();
     }
 }

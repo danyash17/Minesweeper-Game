@@ -28,15 +28,15 @@ public class MainApplication extends Application {
     @FXML
     public Button playbutton;
     private static Field FIELD;
-    private final MenuService service;
-    private final SoundDispatcher soundDispatcher;
-    private final CalculateHelper calculateHelper;
+    private final MenuService SERVICE;
+    private final SoundDispatcher SOUND_DISPATCHER;
+    private final CalculateHelper CALCULATE_HELPER;
 
     public MainApplication() {
         FIELD = Field.getInstance();
-        service = new MenuService();
-        soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory());
-        calculateHelper = new CalculateHelper();
+        SERVICE = new MenuService();
+        SOUND_DISPATCHER = new SoundDispatcher(new SoundDispatcherFactory());
+        CALCULATE_HELPER = new CalculateHelper();
     }
 
     @Override
@@ -57,12 +57,12 @@ public class MainApplication extends Application {
     public void process(ActionEvent event) {
         String id = ((Node) event.getSource()).getId();
         if (Arrays.stream(Difficulty.values()).anyMatch((x) -> x.name().equals(id.toUpperCase()))) {
-            FIELD.setBombCount(calculateHelper.calculateBombs(id.toUpperCase(), FIELD.getSize()));
-            soundDispatcher.playSound(Sound.valueOf(id.toUpperCase()));
+            FIELD.setBombCount(CALCULATE_HELPER.calculateBombs(id.toUpperCase(), FIELD.getSize()));
+            SOUND_DISPATCHER.playSound(Sound.valueOf(id.toUpperCase()));
         } else if (id.equals("playbutton")) {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
-            service.startGame(FIELD);
+            SERVICE.startGame(FIELD);
         }
     }
 

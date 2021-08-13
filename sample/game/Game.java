@@ -1,23 +1,21 @@
 package sample.game;
 
-import javafx.stage.Stage;
-import sample.factory.StageFactory;
 import sample.field.Field;
 import sample.observer.FieldObserver;
 
 public class Game extends Thread {
-    private final Field field;
+    private final Field FIELD;
     private FieldObserver observer;
 
     public Game(Field field) {
-        this.field = field;
+        this.FIELD = field;
     }
 
     @Override
     public void run() {
         while (true){
             if(interrupted()){
-                field.getClock().interrupt();
+                FIELD.getClock().interrupt();
                 break;
             }
         }
@@ -33,6 +31,6 @@ public class Game extends Thread {
     }
 
     public Field getField() {
-        return field;
+        return FIELD;
     }
 }

@@ -10,10 +10,10 @@ import sample.path.ImagePath;
 import java.util.stream.IntStream;
 
 public class DrawHelper {
-    private final SearchHelper searchHelper;
+    private final SearchHelper SEARCH_HELPER;
 
     public DrawHelper(SearchHelper searchHelper) {
-        this.searchHelper = searchHelper;
+        this.SEARCH_HELPER = searchHelper;
     }
 
     public void drawRegion(Field field, Group root, int x, int y) {
@@ -28,7 +28,7 @@ public class DrawHelper {
                         y + j < size && y + j >= 0 &&
                         !openedTiles[x + i][y + j] &&
                         !bombs[x + i][y + j]) {
-                    boolean[] around = searchHelper.searchBombsAround(field, bombs, x, y);
+                    boolean[] around = SEARCH_HELPER.searchBombsAround(field, bombs, x, y);
                     if (IntStream.range(0, around.length)
                             .mapToObj(t -> around[t])
                             .noneMatch(t -> t)) {

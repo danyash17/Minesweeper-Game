@@ -25,11 +25,11 @@ import sample.service.*;
 
 public class StageFactory {
     private static StageFactory instance;
-    private final FieldBuilder fieldBuilder;
-    private final CalculateHelper calculateHelper;
+    private final FieldBuilder FIELD_BUILDER;
+    private final CalculateHelper CALCULATE_HELPER;
     private StageFactory(FieldBuilder fieldBuilder, MenuService menuService, CalculateHelper calculateHelper) {
-        this.fieldBuilder = fieldBuilder;
-        this.calculateHelper = calculateHelper;
+        this.FIELD_BUILDER = fieldBuilder;
+        this.CALCULATE_HELPER = calculateHelper;
     }
 
     public static StageFactory getInstance() {
@@ -44,7 +44,7 @@ public class StageFactory {
         Group root = new Group();
         Scene scene = new Scene(root, 600, 645);
         Stage stage = new Stage();
-        fieldBuilder.buildField(field, root, game);
+        FIELD_BUILDER.buildField(field, root, game);
         game.setObserver(new FieldObserver(this, field, game));
         root.getChildren().add(field.getTileGrid());
         root.getChildren().add(field.getScoreboard());
@@ -73,7 +73,7 @@ public class StageFactory {
         congrats.setFont(Font.font("Stencil", 21));
         congrats.setLayoutX(70);
         congrats.setLayoutY(29);
-        int points = success ? calculateHelper.calculateScore(field) : 0;
+        int points = success ? CALCULATE_HELPER.calculateScore(field) : 0;
         Text score = new Text("Your final score is\n" + points);
         score.setFont(Font.font("Stencil", 21));
         score.setLayoutX(141);

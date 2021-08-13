@@ -20,7 +20,7 @@ public class Field {
     private Pane scoreboard;
     private Flags flags;
     private Clock clock;
-    private final SoundDispatcher soundDispatcher;
+    private final SoundDispatcher SOUND_DISPATCHER;
     private static final Difficulty DEFAULT_DIFFICULTY = Difficulty.valueOf("NOVICE");
     private static final int DEFAULT_SIZE = 20;
     private static final int DEFAULT_BOMB_COUNT = DEFAULT_SIZE - 1;
@@ -31,7 +31,7 @@ public class Field {
         bombCount = DEFAULT_BOMB_COUNT;
         flags = new Flags(new Text(String.valueOf(bombCount)), bombCount);
         clock = new Clock();
-        soundDispatcher = new SoundDispatcher(new SoundDispatcherFactory());
+        SOUND_DISPATCHER = new SoundDispatcher(new SoundDispatcherFactory());
     }
 
     public static Field getInstance() {
@@ -139,6 +139,6 @@ public class Field {
     }
 
     public SoundDispatcher getSoundDispatcher() {
-        return soundDispatcher;
+        return SOUND_DISPATCHER;
     }
 }
