@@ -24,11 +24,11 @@ public class SoundDispatcher {
     }
 
     public void playSound(Sound sound) {
-        MediaPlayer clip = soundMap.get(sound);
-        clip.play();
+//        MediaPlayer clip = soundMap.get(sound);
+//        clip.play();
     }
     public void setVolume(Sound sound,double value){
-        MediaPlayer clip=soundMap.get(sound);
-        clip.setVolume(value/100);
+//        MediaPlayer clip=soundMap.get(sound);
+//        clip.setVolume(value/100);
     }
 }
