@@ -33,7 +33,7 @@ And the last step. Close Project Structure, find **Current file** label, click, 
   --add-modules=javafx.controls,javafx.fxml
 ```
 
-Please make sure to paste YOUR path to JavaFX SDK instead of <path-to-javafx-sdk>. Save the configuration.
+Please make sure to paste YOUR path to JavaFX SDK instead of path-to-javafx-sdk. Save the configuration.
 ![6](demo/6.png)
 ![8](demo/8.png)
 
